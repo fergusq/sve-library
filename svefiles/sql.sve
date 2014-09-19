@@ -1,0 +1,36 @@
+def: connection(host, port, database, username, pw) {
+
+	DriverManager = static("java.sql.DriverManager")
+
+	local url = "jdbc:mysql://" + host + ":" + port + "/" + database;
+	return DriverManager.getConnection_String_String_String(url, username, pw)
+}
+
+def: sql(conn, query) {
+	local statement = conn.createStatement();
+	statement.execute(query);
+	statement.close();
+}
+
+def: sql_query(conn, query) {
+	local statement = conn.createStatement();
+	local resultset = statement.executeQuery(query);
+	#statement.close();
+	return resultset
+}
+
+def: sql_update(conn, query) {
+	local statement = conn.createStatement();
+	statement.executeUpdate(query);
+	statement.close();
+}
+
+log::"sql.sve: Loaded!"
+
+# example
+
+# c = connection("localhost", 3306, "mydatabase", "root", "password")
+# rs = c->sql_query("SELECT name FROM users")
+# rs.next()
+# print::rs.getString("name")
+# c.close()

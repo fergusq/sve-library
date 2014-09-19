@@ -1,0 +1,74 @@
+## blocks
+## by fergusq
+
+def:countblocks(xa,ya,za,xb,yb,zb, v) {
+ if: xa > xb {
+  local xg = xa
+  xa = xb
+  xb = xg
+ }
+ if: ya > yb {
+  local yg = ya
+  ya = yb
+  yb = yg
+ }
+ if: za > zb {
+  local zg = za
+  za = zb
+  zb = zg
+ }
+ local iter = 0
+ for: local xc=xa,xc<=xb,xc++ {
+  for: local yc=ya,yc<=yb,yc++ {
+   for: local zc=za,zc<=zb,zc++ {
+    if: @w[v].getblock(xc,yc,zc) != 0 iter = iter + 1
+   }
+  }
+ }
+ return iter
+}
+sethelp("countblocks", "countblocks(xa,ya,za,xb,yb,zb,world): Count blocks in a cuboid")
+
+def: fsblockspawn(x,y,z,w,id,data) {
+	x=fixcoord::x
+	y=fixcoord::y
+	z=fixcoord::z
+	local fs = w.spawnfs(x,y,z,id,data)
+	fs.setVelocity(vector(0,0.5,0,nil))
+	local flag=false
+	local tim = timer(def {
+		if:flag {
+			tim.stop()
+			local x1 = fixcoord::fs.getLocation().getX()
+			local y1 = fixcoord::fs.getLocation().getY()
+			local z1 = fixcoord::fs.getLocation().getZ()
+			w.getblock(x1,y1,z1).setid(id)
+			w.getblock(x1,y1,z1).setdata(data)
+			fs.remove()
+		}
+		flag = true
+	}, 8)
+	return fs
+}
+sethelp("fsblockspawn", "fsblockspawn(x,y,z,world,id,data): Spawns a new block using falling sand effect.")
+
+def: fsblockdel(x,y,z,w,id,data) {
+	local x1=fixcoord::x
+	local y1=fixcoord::y
+	local z1=fixcoord::z
+	w.getblock(x1,y1,z1).setid(0)
+	local fs = w.spawnfs(x1,y1,z1,id,data)
+	fs.setVelocity(vector(0,0.7,0,nil))
+	local flag=false
+	local tim = timer(def {
+		if:flag {
+			tim.stop()
+			fs.remove()
+		}
+		flag = true
+	}, 8)
+	return fs
+}
+sethelp("fsblockspawn", "fsblockdel(x,y,z,world,id,data): Destroys a block using falling sand effect.")
+
+log::"blocks.sve: Loaded!"

@@ -1,0 +1,100 @@
+## math
+## by CosmoConsole
+
+def:abs(x) {
+ if: x < 0 return 0 - x
+ return x
+}
+
+def:sgn(x) {
+	if: x<0 return -1
+	else: return 1
+}
+
+def:max(a,b) {
+ if: b > a return b
+ return a
+}
+def:min(a,b) {
+ if: b < a return b
+ return a
+}
+
+def:sqrt(x)
+	return pow(x,1/2)
+
+def:round(x,d) {
+	return floor(x * pow(10,d)) / pow(10,d)
+}
+def:floor(x) {
+	return x-x%1
+}
+def:ceil(x) {
+	if: x%1 == 0 {
+		return x
+	}
+	return floor(x) + 1
+}
+
+pi = 3.141592653589793238462643383279502884197169399375105820974944592307816406286
+_e = 2.71828182846
+
+# x = _e, d = 12
+def:logn(num,x,d) {
+ if: num <= 0
+  return nil
+ if: !x x=_e
+ if: !d d=12
+ local i = 0
+ while: num < 1 {
+  i = i - 1
+  num = num * x
+ }
+ while: num >= x {
+  i = i + 1
+  num = num / x
+ }
+ local result = i + "."
+ local digit = 0
+ while: d > 0 {
+  num = pow(num,10)
+  digit = 0
+  while: num >= x {
+   digit = digit + 1
+   num = num / x
+  }
+  result = result + digit
+  d = d - 1
+ }
+ return number(result)
+}
+
+def:factorial(m) {
+ if: m < 2 return 1
+ return (m*factorial(m-1))
+}
+sin = static("java.lang.Math").sin_double
+cos = static("java.lang.Math").cos_double
+tan = static("java.lang.Math").tan_double
+def:sec(m,t) return pow(sin(m,t), -1)
+def:csc(m,t) return pow(cos(m,t), -1)
+def:cot(m,t) return pow(tan(m,t), -1)
+def:r2d(r) {
+ return r*(180/pi)
+}
+def:d2r(d) {
+ return d*(pi/180)
+}
+
+# help
+sethelp("factorial","factorial(n): Calculates n! (factorial of n)")
+sethelp("sin","sin(x,[accuracy=9]): Calculate sine of x radians")
+sethelp("cos","cos(x,[accuracy=9]): Calculate cosine of x radians")
+sethelp("tan","tan(x,[accuracy=9]): Calculate tangent of x radians")
+sethelp("sec","sec(x,[accuracy=9]): Calculate secant of x radians")
+sethelp("csc","csc(x,[accuracy=9]): Calculate cosecant of x radians")
+sethelp("cot","cot(x,[accuracy=9]): Calculate cotangent of x radians")
+sethelp("r2d","r2d(r): Converts r radians to degrees")
+sethelp("d2r","d2r(d): Converts d degrees to radians")
+
+log::"math.sve: Loaded!"

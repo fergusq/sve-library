@@ -1,0 +1,11 @@
+include::"svefiles/arrays.sve"
+include::"svefiles/blocks.sve"
+include::"svefiles/chat.sve"
+include::"svefiles/loops.sve"
+include::"svefiles/math.sve"
+include::"svefiles/players.sve"
+include::"svefiles/strings.sve"
+include::"svefiles/sql.sve"
+include::"svefiles/threads.sve"
+
+print::"all.sve: Loaded!"

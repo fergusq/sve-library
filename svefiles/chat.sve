@@ -1,0 +1,25 @@
+## chat
+## by CosmoConsole and fergusq
+
+def: write(text) print::replace(text, :&, @@)
+def: reply(msg) tell(@m, msg)
+def: tellarr(r,m) foreach(r, def(p) tell(p,m))
+def: cw(m) exec(@m,replace(m,"&",@@))
+def: rcw(x) = replace(x, "&", @@)
+
+# help
+sethelp("tellarr","tellarr(players,m): Tell all players in array players the message m")
+sethelp("cw","cw(command): Reruns the command with color wrapping (& becomes section sign)")
+sethelp("rcw","cw(command): Replaces & with section sign")
+
+registercommand(:say, :svesay, def {
+	local command = ""
+	foreach($$["$args"])::def (arg) command = command + " " + arg
+	
+	foreach(@a)::def (p) {
+		if: hasperm(p, "svesay.spy") p.sendMessage_String("§5[§dchat.sve§5]§e " + @m + " said:§f" + command)
+		else: p.sendMessage_String("§5[§dRandom voice§5]§e" + command)
+	}
+})
+
+log::"chat.sve: Loaded!"

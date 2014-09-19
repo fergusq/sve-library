@@ -1,0 +1,33 @@
+## threads
+## by fergusq
+
+def: when(cond, action) {
+	local tim = timer(def {
+		if: cond() {
+			action()
+			tim.stop()
+		}
+	}, 5)
+}
+sethelp(:when, "when(cond, action): Call action when cond returns true (check-interval 5 ticks)")
+
+def: wait(time, action) {
+	local flag = false
+	local tim=timer(def {
+		if: flag {
+			tim.stop()
+			action()
+		}
+		flag = true
+	}, time)
+	return tim
+}
+sethelp(:wait, "wait(time, action): Wait some tickes and execute action")
+
+def: ticks(seconds) = seconds * 20
+sethelp(:ticks, "ticks(seconds): Convert seconds to ticks")
+
+def: seconds(ticks) = ticks / 20
+sethelp(:seconds, "seconds(ticks): Convert ticks to seconds")
+
+log::"threads.sve: Loaded!"

@@ -1,0 +1,77 @@
+## players
+## by CosmoConsole and fergusq
+
+def:nearest(x,y,z,w,r) {
+ local np = ""
+ local nd = 2147483647
+ foreach(players(), def(p) {
+  if: w == p.world {
+   local d = max(abs(p.x - x), max(abs(p.y - y), abs(p.z - z)))
+   if: nd > d {
+    np = p
+    nd = d
+   }
+  }
+ })
+ if: np != "" {
+  if: nd < r return np
+ }
+ return nil
+}
+sethelp("nearest", "nearest(x,y,z,world,radius): Find the nearest player")
+
+def:allat(x,y,z,w,r) {
+ local ap = table()
+ foreach(players(), def(p) {
+  if: w == p.world {
+   local d = max(abs(p.x - x), max(abs(p.y - y), abs(p.z - z)))
+   if: d < r {
+    ap = insert(ap, p)
+   }
+  }
+ })
+ return ap
+}
+sethelp("allat", "allat(x,y,z,world,radius): Find players at a location")
+
+def:allatcubic(x1,y1,z1,x2,y2,z2,w) {
+ if: x1 > x2 { local t = x2 x2=x1 x1=t }
+ if: y1 > y2 { local t = y2 y2=y1 y1=t }
+ if: z1 > z2 { local t = z2 z2=z1 z1=t }
+ #print::x1 + "," + y1 + "," + z1 + ";" + x2 + "," + y2 + "," + z2
+ local ap = table()
+ foreach(players(), def(p) {
+  if: w == p.world {
+   #print::floor(p.x) +">"+ x1 +"&&"+ floor(p.y) +">"+ y1 +"&&"+ floor(p.z) +">"+ z1 +"&&"+ floor(p.x) +"<"+ x2 +"&&"+ floor(p.y) +"<"+ y2 +"&&"+ floor(p.z) +"<"+ z2
+   if: p.x >= x1 && p.y >= y1 && p.z >= z1 && p.x <= x2 && p.y <= y2 && p.z <= z2 {
+   	ap = insert(ap, p)
+   }
+  }
+ })
+ return ap
+}
+sethelp("allatcubic", "allatcubic(x1,y1,z1,x2,y2,z2,world): Find players at a location")
+
+def: forallat(radius) {
+    local b=@m.getBlock()
+    return foreach(allat(b.getX(),b.getY(),b.getZ(),b.getWorld(),radius))
+}
+sethelp("forallat", "forallat(radius): For each player in a specific radius - can be only used in command blocks")
+
+def:tprel(p, x, y, z) {
+	local l = p.getLocation()
+	l.setX(l.getX()+x)
+	l.setY(l.getY()+y)
+	l.setZ(l.getZ()+z)
+	p.teleport_Location(l)
+}
+
+def:tpto(p, x, y, z) {
+	local l = p.getLocation()
+	l.setX(x)
+	l.setY(y)
+	l.setZ(z)
+	p.teleport_Location(l)
+}
+
+log::"players.sve: Loaded!"

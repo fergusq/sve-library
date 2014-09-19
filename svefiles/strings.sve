@@ -1,0 +1,118 @@
+## strings
+## by CosmoConsole
+
+def:strnil(x,y) {
+ if: type(x) == "nil" return y
+ return x
+}
+def:replace(input,from,to) {
+ local output = ""
+ if: strlen(from) > strlen(input)
+  return input
+ if: strlen(from) < 1
+  return input
+ if: strlen(input) < 1
+  return input
+ local reml = strlen(from) - 1
+ local iterator = 0
+ while: iterator < (strlen(input) - strlen(from)) {
+  local str = substr(input,iterator,iterator+strlen(from))
+  if: str == from {
+   output = output + to
+   iterator = iterator + strlen(from)
+  } else: {
+   output = output + substr(str,0,1)
+   iterator = iterator + 1
+  }
+ }
+ if: iterator < strlen(input) {
+  output = output + substr(input,iterator,strlen(input))
+ }
+ return output
+}
+
+def:strjoin(str,delim) {
+ if: type(str)!="table"
+  return str
+ local result = ""
+ foreach(str, def(x) result = result + delim + x)
+ return substr(result, strlen(delim), strlen(result))
+}
+def:asc(char) { if: strlen(char) < 1 { return -1 } return charat(char,0) }
+def:tobin(str,bits) {
+ local num = str
+ num = num - num % 1
+ local i = (bits - 1)
+ local result = ""
+ while: i >= 0 {
+  if: andb(num, pow(2,i)) != 0 {
+   result = result + "1"
+  } else: {
+   result = result + "0"
+  }
+  i = i - 1
+ }
+ return result
+}
+def:tohex(str,nibs) {
+ local hexdigits = table("0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F")
+ local num = str
+ num = num - num % 1
+ local i = (nibs - 1)
+ local result = ""
+ while: i >= 0 {
+  local w = 15
+  w = shlb(w,i*4)
+  w = andb(num,w)
+  w = shrb(w,i*4)
+  result = result + hexdigits[w]
+  i = i - 1
+ }
+ return result
+}
+def:rot13(str) {
+ local g = ""
+ ct = ""
+ for: i=0,i<strlen(str),i++ {
+  ct = charat(str,i)
+  local t = false
+  if: ct >= 97 {
+   if: ct <= 122 {
+    local v = ct - 97
+    v = v + 13
+    v = v % 26
+    v = v + 97
+    g = g + chr(v)
+    t = true
+   }
+  }
+  if: t == false {
+   if: ct >= 65 {
+    if: ct <= 90 {
+     local v = ct - 65
+     v = v + 13
+     v = v % 26
+     v = v + 65
+     g = g + chr(v)
+     t = true
+    } 
+   }
+  }
+  if: t == false
+   g = g + chr(ct)
+  
+ }
+ return g
+}
+
+# help
+sethelp("strnil","strnil(text,ifnil): Returns ifnil if text is nil, otherwise returns text")
+sethelp("strjoin","strjoin(table,delimeter): TODO")
+sethelp("replace","replace(string, from, to): Replaces all occurances of from with to")
+sethelp("asc","asc(char): Get number of character")
+
+sethelp("tobin","tobin(number,bits): TODO")
+sethelp("tohex","tohex(number,nibs): TODO")
+sethelp("rot13","rot13(string): Encode string using ROT13 algorythm")
+
+log::"strings.sve: Loaded!"

@@ -1,0 +1,38 @@
+## loops
+## by fergusq
+
+def: yielder(function) {
+	return def {
+		local args = $$["$args"]
+		return def (callback) {
+			local fun = new(function)
+			setls(fun, setsup({yield = def(arg) = callback(arg)}, $))
+			return fun(args)
+		}
+	}
+}
+
+sethelp("yielder", "yielder(function): Creates a new yielder function")
+
+# foreach = yielder::def(t) {
+# 	local l = len::t
+# 	for:	local i=0,
+# 		i < l,
+# 		i++
+# 		
+# 		yield(t[i])
+# }
+
+def: foreach (t, u)
+	if: !u return def (u)
+		foreach(t, u)
+	
+	else: {	local l = len::t
+		for:	local i=0,
+			i < l,
+			i++
+		
+			u(t[i]) }
+
+sethelp("foreach", "foreach(array, function): Call function for each array index")
+log::"loops.sve: Loaded!"
