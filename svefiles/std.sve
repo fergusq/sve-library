@@ -1,0 +1,10 @@
+log=print
+
+include::"svefiles/arrays.sve"
+include::"svefiles/loops.sve"
+include::"svefiles/math.sve"
+include::"svefiles/strings.sve"
+include::"svefiles/sql.sve"
+#include::"svefiles/threads.sve"
+
+print::"std.sve: Loaded!"
